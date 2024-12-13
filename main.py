@@ -7,19 +7,16 @@ import subprocess
 import sys
 
 import openai
-from dotenv import load_dotenv
 
 
 def main():
     """
     Main function to generate a prompt for a GitHub PR command.
     """
-    # Use dotenv to load environment variables
-    load_dotenv()
 
-    # Check os.environ for OPENAI_API_KEY
-    if "OPENAI_API_KEY" not in os.environ:
-        print("Error: OPENAI_API_KEY not found in environment variables")
+    # Check os.environ for PR_AGENT_OPENAI_API_KEY
+    if "PR_AGENT_OPENAI_API_KEY" not in os.environ:
+        print("Error: PR_AGENT_OPENAI_API_KEY not found in environment variables")
         sys.exit(1)
 
     # Get the current branch name
@@ -60,13 +57,17 @@ def main():
     # print(prompt)
 
     # Call OpenAI API using environment variables
-    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    client = openai.OpenAI(api_key=os.getenv("PR_AGENT_OPENAI_API_KEY"))
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
     )
 
-    command = response.choices[0].message.content.strip()
+    command = response.choices[0].message.content
+    assert command is not None
+
+    # Strip blank lines
+    command = command.strip()
 
     # Remove the ``` markdown block
     command = command.replace("```bash\n", "")
