@@ -6,9 +6,12 @@ authors = ["George Ruan <ruan.george@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.14"
 openai = "^1.57.4"
 
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.11.1"
 
 [build-system]
 requires = ["poetry-core"]
