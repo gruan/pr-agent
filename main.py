@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Runs a PR command writing title and description via GPT-4o
 """
@@ -73,8 +74,14 @@ def main():
     command = command.replace("```bash\n", "")
     command = command.replace("```", "")
 
-    # Remove the ` backticks since they cause issues with bash
-    command = command.replace("`", "")
+    # Escape backticks so they are literal in the shell instead of being interpreted as a command substitution
+    # ` -> \`
+    command = command.replace("`", "\\`")
+
+    # Convert literal "\n" strings to actual newlines if necessary
+    # In many cases, the model will return actual newline chars already,
+    # but if it returns literal backslash-n sequences, convert them:
+    command = command.replace("\\n", "\n")
 
     # Ensure it starts with `gh pr create`
     if not command.startswith("gh pr create"):
