@@ -74,10 +74,10 @@ def main():
     command = command.replace("```", "")
 
     # Remove the ` backticks since they cause issues with bash
-    command = command.replace("`", "")
+    command = command.replace("`", "\`")
 
     # Replace \n with actual newlines
-    command = command.replace("\n", " \n ")
+    command = command.replace("\\n", " \n ")
 
     # Ensure it starts with `gh pr create`
     if not command.startswith("gh pr create"):
